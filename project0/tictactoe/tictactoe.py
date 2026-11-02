@@ -25,13 +25,17 @@ def player(board):
     """
     x_count = 0
     o_count = 0
+    for row in board:
+        for cell in row:
+            if cell == X:
+                x_count += 1
+            elif cell == O:
+                o_count += 1
 
-    if x_count > o_count:
-        o_count += 1
-        return O
-    else:
-        x_count += 1
+    if x_count <= o_count:
         return X
+    else:
+        return O
 
 
 def actions(board):
