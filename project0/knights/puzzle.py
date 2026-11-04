@@ -1,4 +1,4 @@
-from logic import *
+from project0.knights.logic import *
 
 AKnight = Symbol("A is a Knight")
 AKnave = Symbol("A is a Knave")
