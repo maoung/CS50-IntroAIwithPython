@@ -1,4 +1,4 @@
-from project1.knights.logic import *
+from logic import *
 
 AKnight = Symbol("A is a Knight")
 AKnave = Symbol("A is a Knave")
@@ -13,7 +13,8 @@ CKnave = Symbol("C is a Knave")
 # A says "I am both a knight and a knave."
 knowledge0 = And(
     # TODO
-    And(AKnight, AKnave),
+    Implication(AKnight, And(AKnight, AKnave)),
+    Implication(AKnave, Not(And(AKnight, AKnave))),
     Or(AKnight, AKnave),
     Not(And(AKnight, AKnave))
 )
@@ -24,7 +25,11 @@ knowledge0 = And(
 knowledge1 = And(
     # TODO
     Implication(AKnight, And(AKnave, BKnave)),
-    Implication(AKnave, BKnight)
+    Implication(AKnave, Not(And(AKnave, BKnave))),
+    Or(AKnight, AKnave),
+    Or(BKnight, BKnave),
+    Not(And(AKnight, AKnave)),
+    Not(And(BKnight, BKnave))
 )
 
 # Puzzle 2
@@ -33,9 +38,13 @@ knowledge1 = And(
 knowledge2 = And(
     # TODO
     Implication(AKnight,Or(And(AKnight, BKnight), And(AKnave, BKnave))),
-    Implication(AKnave, Or(And(AKnight, BKnave), And(AKnave, BKnight))),
+    Implication(AKnave, Not(Or(And(AKnight, BKnight), And(AKnave, BKnave)))),
     Implication(BKnight, Or(And(AKnight, BKnave), And(AKnave, BKnight))),
-    Implication(BKnave, Or(And(AKnight, BKnight), And(AKnave, BKnave)))
+    Implication(BKnave, Not(Or(And(AKnight, BKnave), And(AKnave, BKnight)))),
+    Or(AKnight, AKnave),
+    Or(BKnight, BKnave),
+    Not(And(AKnight, AKnave)),
+    Not(And(BKnight, BKnave))
 )
 
 # Puzzle 3
@@ -45,10 +54,18 @@ knowledge2 = And(
 # C says "A is a knight."
 knowledge3 = And(
     # TODO
-    Or(AKnight, AKnave),
-    Implication(BKnight, AKnave),
+    Implication(BKnight, And(AKnight, AKnave)),
+    Implication(BKnave, Or(AKnight, AKnave)),
     Implication(BKnight, CKnave),
+    Implication(BKnave, Not(CKnave)),
     Implication(CKnight, AKnight),
+    Implication(CKnave, Not(AKnight)),
+    Or(AKnight, AKnave),
+    Or(BKnight, BKnave),
+    Or(CKnight, CKnave),
+    Not(And(AKnight, AKnave)),
+    Not(And(BKnight, BKnave)),
+    Not(And(CKnight, CKnave))
 )
 
 
