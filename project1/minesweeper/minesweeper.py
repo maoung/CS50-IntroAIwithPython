@@ -105,28 +105,32 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
-        return self.cells
+        if len(self.cells) == self.count:
+            return self.cells
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
-        safe_cells = set()
+        if self.count == 0:
+            return self.cells
 
     def mark_mine(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
-        if cell in Sentence:
-            
+        if cell in self.cells:
+            self.cells.remove(cell)
+            self.count -= 1
 
     def mark_safe(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
-        raise NotImplementedError
+        if cell in self.cells:
+            self.cells.remove(cell)
 
 
 class MinesweeperAI():
@@ -183,7 +187,36 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
-        raise NotImplementedError
+        self.moves_made.add(cell)
+        self.mark_safe(cell)
+        new_knowledge = set()
+
+        i, j = cell
+        for row in range(i-1, i+1+1):
+            for col in range(j-1, j+1+1):
+                if 0<=row<self.height and 0<=col<self.width:
+                    neighbors = (row, col)
+                    if neighbors == cell:
+                        continue
+                    else:
+                        if neighbors in self.mines:
+                            count -= 1
+                        elif neighbors in self.safes:
+                            continue
+                        else:
+                            new_knowledge.add(neighbors)
+                else:
+                    continue
+        if len(new_knowledge) != 0:
+            self.knowledge.append(Sentence(new_knowledge, count))
+
+        for knowledge in self.knowledge:
+            for mine in knowledge.known_mines():
+                self.mark_mine(mine)
+            for safe in knowledge.known_safes():
+                self.mark_safe(safe)
+
+        
 
     def make_safe_move(self):
         """
